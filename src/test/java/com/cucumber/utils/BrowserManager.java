@@ -13,6 +13,8 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class BrowserManager { private static WebDriver driver;
 
+    public static final String SCREENSHOT_FILEPATH = System.getProperty("user.dir") + "/screenshot/";
+
 
     @Before
     public static WebDriver getDriver(BrowserType browserType) {
@@ -56,6 +58,9 @@ public class BrowserManager { private static WebDriver driver;
         }
     }
 
+    public static String getScreenshotFilePath() {
+        return SCREENSHOT_FILEPATH;
+    }
 
 
     public enum BrowserType {

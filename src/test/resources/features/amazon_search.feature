@@ -1,5 +1,6 @@
 Feature: Amazon Product Search
 
+  @amazon
   Scenario Outline: Search Samsung phones with specific specifications
     Given User is on Amazon.co.uk homepage
     When User clicks on All Menu
