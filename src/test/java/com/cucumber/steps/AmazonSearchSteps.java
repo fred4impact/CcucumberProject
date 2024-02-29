@@ -4,13 +4,18 @@ package com.cucumber.steps;
 import com.cucumber.pages.HomePage;
 import com.cucumber.pages.SearchResultPage;
 import com.cucumber.utils.BrowserManager;
+import com.cucumber.utils.TestUtils;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class AmazonSearchSteps {
+
+    private static final Logger logger = LoggerFactory.getLogger(SauceDemoSteps.class);
 
     private WebDriver driver;
     private HomePage homePage;
@@ -18,7 +23,9 @@ public class AmazonSearchSteps {
 
     public AmazonSearchSteps() {
         // Initialize WebDriver
+        logger.info("------ Started Browser ------ ");
         this.driver = BrowserManager.getDriver(BrowserManager.BrowserType.CHROME);
+
         // Initialize page objects
         this.homePage = new HomePage(driver);
         this.searchResultPage = new SearchResultPage(driver);
@@ -26,12 +33,20 @@ public class AmazonSearchSteps {
 
     @Given("^User is on Amazon.co.uk homepage$")
     public void userIsOnAmazonHomepage() {
+        logger.info("------ Open Appliation ------ ");
         homePage.navigateToHomePage();
+
+        homePage.handleCaptcha();
+
+        logger.info("------ Click Decline Button ------ ");
         homePage.clickDeclineButton();
+
+
     }
 
     @When("^User click on All Menu$")
     public void userClickOnAllMenu() {
+        TestUtils.waitFor(300);
         homePage.clickOnAllMenu();
     }
 

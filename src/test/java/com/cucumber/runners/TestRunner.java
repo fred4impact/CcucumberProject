@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
         monochrome = true,
         features = "src/test/resources/features/",
         glue = "com.cucumber.steps",
-        tags = "@amazon", //  use this tag to run only amazon @amazon
+        tags = "@amazon", // run only amazon @amazon / @saudemo
         plugin = {
                 "pretty",
                 "html:target/cucumber-reports",

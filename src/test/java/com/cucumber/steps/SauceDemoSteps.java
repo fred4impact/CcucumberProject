@@ -11,6 +11,9 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +22,9 @@ import static org.junit.Assert.assertEquals;
 
 
 public class SauceDemoSteps {
+    //logger
+    private static final Logger logger = LoggerFactory.getLogger(SauceDemoSteps.class);
+
 
     private WebDriver driver;
     private BrowserManager browserManager;
@@ -29,14 +35,21 @@ public class SauceDemoSteps {
 
     @Before
     public void setUp() {
+
         driver = BrowserManager.getDriver(BrowserManager.BrowserType.CHROME);
+        logger.info("------ Started Browser ------ ");
+        page = new IndexPage(driver);
+        productPage = new ProductPage(driver);
     }
 
 
     @Given("User navigates to {string}")
     public void userNavigatesTo(String url) {
+
         page = new IndexPage(driver);
         page.navigateTo(url);
+        logger.info("------ Open Application ------ ");
+
     }
 
     @When("User logs in with username {string} and password {string}")
@@ -45,8 +58,8 @@ public class SauceDemoSteps {
     }
 
     @Then("User searches for a product {string}")
-    public void userSearchesForAProduct(String product) {
-        // Example: Implement product search
+    public void userSearchesForAPsaudemoroduct(String product) {
+       // productPage.userSearchesForAProduct(product);
     }
 
     @Then("User validates the number of products displayed")
@@ -85,6 +98,8 @@ public class SauceDemoSteps {
                 System.out.println(productName);
             }
         }
+
+        logger.debug("------ Starting ------");
         BrowserManager.quitDriver();
     }
 

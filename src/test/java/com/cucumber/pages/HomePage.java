@@ -4,64 +4,83 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 public class HomePage {
 
-    private  WebDriver driver;
-    private  WebDriverWait wait;
+    private final WebDriver driver;
+    private final WebDriverWait wait;
 
-    private  By searchBar = By.id("twotabsearchtextbox");
-    private  By searchButton = By.id("nav-search-submit-button");
-    private  By categoryMenu = By.id("nav-hamburger-menu");
-    private  By electronicsAndComputersLink = By.xpath("//div[@id='hmenu-content']//a[text()='Electronics & Computers']");
-    private  By phonesAndAccessoriesLink = By.xpath("//a[contains(@href,'/mobile-phones')]");
-    private  By mobilePhonesLink = By.xpath("//div[contains(@aria-label,'Mobile Phones')]/..//a[contains(@href,'/mobile-phones')]");
-    private  By accept = By.linkText("Accept");
-    private final By formDisplay = By.id("sp-cc");
-    private final By declineButton = By.id("sp-cc-rejectall-button");
+    @FindBy(id = "twotabsearchtextbox")
+    private WebElement searchBar;
 
-    private By captchaFrame = By.id("captchaFrame");
-    private By captchaInput = By.id("captchaInput");
-    private By captchaSubmitButton = By.id("captchaSubmitButton");
+    @FindBy(id = "nav-search-submit-button")
+    private WebElement searchButton;
 
+    @FindBy(id = "nav-hamburger-menu")
+    private WebElement categoryMenu;
 
+    @FindBy(xpath = "//div[@id='hmenu-content']//a[text()='Electronics & Computers']")
+    private WebElement electronicsAndComputersLink;
+
+    @FindBy(xpath = "//a[contains(@href,'/mobile-phones')]")
+    private WebElement phonesAndAccessoriesLink;
+
+    @FindBy(xpath = "//div[contains(@aria-label,'Mobile Phones')]/..//a[contains(@href,'/mobile-phones')]")
+    private WebElement mobilePhonesLink;
+
+    @FindBy(linkText = "Accept")
+    private WebElement accept;
+
+    @FindBy(id = "sp-cc")
+    private WebElement formDisplay;
+
+    @FindBy(id = "sp-cc-rejectall-button")
+    private WebElement declineButton;
+
+    @FindBy(id = "captchaFrame")
+    private WebElement captchaFrame;
+
+    @FindBy(id = "captchaInput")
+    private WebElement captchaInput;
+
+    @FindBy(id = "captchaSubmitButton")
+    private WebElement captchaSubmitButton;
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        PageFactory.initElements(driver, this);
     }
 
     public void navigateToHomePage() {
         driver.get("https://www.amazon.co.uk");
         driver.manage().window().maximize();
         wait.until(ExpectedConditions.titleContains("Amazon"));
-
         handleCaptcha();
         wait.until(ExpectedConditions.titleContains("Select your cookie preferences"));
         acceptAlertIfPresent();
-        // move to form and click the declinen utton
-        wait.until(ExpectedConditions.visibilityOfElementLocated(formDisplay));
+        // move to form and click the decline button
+        wait.until(ExpectedConditions.visibilityOf(formDisplay));
     }
 
     public void searchProduct(String productName) {
-        WebElement searchInput = wait.until(ExpectedConditions.visibilityOfElementLocated(searchBar));
-        searchInput.sendKeys(productName);
-        driver.findElement(searchButton).click();
+        searchBar.sendKeys(productName);
+        searchButton.click();
     }
 
     public void navigateToMobilePhonesCategory() {
-        WebElement categoryMenuButton = wait.until(ExpectedConditions.elementToBeClickable(categoryMenu));
-        categoryMenuButton.click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(electronicsAndComputersLink)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(phonesAndAccessoriesLink)).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(mobilePhonesLink)).click();
+        categoryMenu.click();
+        electronicsAndComputersLink.click();
+        phonesAndAccessoriesLink.click();
+        mobilePhonesLink.click();
     }
 
     public void applyFilters(String cameraResolution, String modelYear, String priceRange) {
@@ -76,7 +95,7 @@ public class HomePage {
     }
 
     public void clickOnAllMenu() {
-        wait.until(ExpectedConditions.elementToBeClickable(categoryMenu)).click();
+        categoryMenu.click();
     }
 
     private void acceptAlertIfPresent() {
@@ -89,18 +108,16 @@ public class HomePage {
 
     private boolean isCaptchaDisplayed() {
         try {
-            return driver.findElement(captchaFrame).isDisplayed();
+            return captchaFrame.isDisplayed();
         } catch (NoSuchElementException ignored) {
             return false;
         }
     }
 
-    private void handleCaptcha() {
+    public void handleCaptcha() {
         if (isCaptchaDisplayed()) {
-            WebElement captchaInputField = wait.until(ExpectedConditions.visibilityOfElementLocated(captchaInput));
-            captchaInputField.sendKeys("Your CAPTCHA solution here");
-
-            wait.until(ExpectedConditions.elementToBeClickable(captchaSubmitButton)).click();
+            captchaInput.sendKeys("Your CAPTCHA solution here");
+            captchaSubmitButton.click();
         }
     }
 
@@ -124,13 +141,12 @@ public class HomePage {
         applyFiltersButton.click();
     }
 
-
     public void clickDeclineButton() {
-        // Click on the decline button on the modal form
-
-        WebElement declineBtn = wait.until(ExpectedConditions.visibilityOfElementLocated(declineButton));
+        WebElement declineBtn = wait.until(ExpectedConditions.visibilityOf(declineButton));
         declineBtn.click();
     }
+
+
 
 
 }

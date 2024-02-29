@@ -36,4 +36,14 @@ public class ProductPage {
         }
         return productNames;
     }
+
+
+    // Method to search for a product
+    public void userSearchesForAProduct(String product) {
+        // Assuming the product search field has id "search" on the page
+        driver.findElement(By.id("search")).sendKeys(product);
+
+        // Assuming the search button has id "search-button" on the page
+        driver.findElement(By.id("search-button")).click();
+    }
 }
